@@ -4,14 +4,51 @@ import AgGridFileView from './AgGridFileView.jsx'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { actions } from '../reducers/actionCreators';
+import $ from 'jquery'
 
 class GoldenLayoutWrapper extends React.Component {
-    constructor(props,context){
+    constructor(props, context) {
         super(props)
+        this.addAddNewReportEvent = this.addAddNewReportEvent.bind(this)
     }
+    //Not in use
+    addAddNewReportEventWithTest() {
+        //When this function is executed the callBack function will be executed every 10 milliseconds
+        var interval = setInterval(function () {
+            var el = $('#HeaderComponentIconPlus'), i;
+            if (el === null) {
+                return;
+            }
+            console.log('tetsing')
+            console.log(el)
+            clearInterval(interval);
+
+            el.on('click', function() {
+                console.log('click')
+                var newItemConfig = {
+                    type: 'react-component',
+                    component: 'FileView'
+                };
+                layout.root.contentItems[0].addChild(newItemConfig);
+                //this.layout.updateSize();
+            });
+
+        }.bind(this), 10);
+    };
+    addAddNewReportEvent() {
+         $('#HeaderComponentIconPlus').on('click', function () {
+                console.log('click-AddNewReport')
+                var newItemConfig = {
+                    type: 'react-component',
+                    component: 'FileView'
+                };
+                layout.root.contentItems[0].addChild(newItemConfig);
+                //this.layout.updateSize();
+            });
+    };
 
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState) {
 
     }
     componentDidMount() {
@@ -37,7 +74,7 @@ class GoldenLayoutWrapper extends React.Component {
             wrapComponent(AgGridFileView, this.context.store)
         );
 
-        
+
         // //Additional Registering is needed only if we are going to use a different component.
         // layout.registerComponent('FileView1',
         //     wrapComponent(AgGridFileView_2, this.context.store)
@@ -52,16 +89,10 @@ class GoldenLayoutWrapper extends React.Component {
             layout.updateSize();
         });
 
-        window.addEventListener('dblclick', () => {
-            console.log('dbclick')
-            var newItemConfig = {
-                type: 'react-component',
-                component: 'FileView'
-            };
-            layout.root.contentItems[0].addChild(newItemConfig);
-            //layout.updateSize();
-        });
+        this.addAddNewReportEvent();
+
     }
+
 
     render() {
         return (
