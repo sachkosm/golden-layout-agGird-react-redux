@@ -48,7 +48,8 @@ const initialState = {
             type: 'row',
             content: [{
                 type: 'react-component',
-                component: 'FileView'
+                component: 'FileView',
+                title: 'Report 1'
             }, {
                 type: 'react-component',
                 component: 'FileView'

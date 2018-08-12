@@ -17,7 +17,8 @@ class FileBrowser extends Component {
         this.onGridReady = this.onGridReady.bind(this)
         this.selectedDateChange = this.selectedDateChange.bind(this)
         this.state = {
-            startDate: '2017-08-13'
+            startDate: new Date().toDateString(),
+            selectedNewDate: null
         }
     }
 
@@ -50,8 +51,9 @@ class FileBrowser extends Component {
 
         return params.node.data.file ? [deleteItem] : [newItem, deleteItem];
     };
-    selectedDateChange(param) {
-
+    selectedDateChange(params) {
+        console.log(params)
+        this.setState({selectedNewDate: params})
     }
 
     render() {
@@ -63,7 +65,8 @@ class FileBrowser extends Component {
                     onChange={this.selectedDateChange}
                     autoClose={true}
                 />
-                <AgGridReact  {...this.props.agGridConfig} />
+                {this.state.selectedNewDate ?
+                <AgGridReact  {...this.props.agGridConfig} /> : null}
 
  
             </div >

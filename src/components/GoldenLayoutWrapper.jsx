@@ -6,6 +6,10 @@ import { bindActionCreators } from 'redux';
 import { actions } from '../reducers/actionCreators';
 
 class GoldenLayoutWrapper extends React.Component {
+    constructor(props,context){
+        super(props)
+    }
+
 
     shouldComponentUpdate(nextProps, nextState){
 
@@ -32,6 +36,8 @@ class GoldenLayoutWrapper extends React.Component {
         layout.registerComponent('FileView',
             wrapComponent(AgGridFileView, this.context.store)
         );
+
+        
         // //Additional Registering is needed only if we are going to use a different component.
         // layout.registerComponent('FileView1',
         //     wrapComponent(AgGridFileView_2, this.context.store)
