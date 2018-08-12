@@ -22,7 +22,7 @@ const initialState = {
             hasHeaders: true,
             constrainDragToContainer: true,
             reorderEnabled: true,
-            selectionEnabled: false,
+            selectionEnabled: true,
             popoutWholeStack: false,
             blockedPopoutsThrowError: true,
             closePopoutsOnUnload: true,

@@ -34,7 +34,6 @@ export default function (state , action) {
 }
 
 
-
 const newFile = (files, filePath) => {
     const num = getNextUntitledFileNumber(files, filePath);
     const newFilePath = filePath.slice();

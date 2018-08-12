@@ -6,9 +6,11 @@ import { bindActionCreators } from 'redux';
 import { actions } from '../reducers/actionCreators';
 
 class GoldenLayoutWrapper extends React.Component {
+
+    shouldComponentUpdate(nextProps, nextState){
+
+    }
     componentDidMount() {
-
-
         function wrapComponent(Component, store) {
             class Wrapped extends React.Component {
                 render() {
@@ -24,7 +26,8 @@ class GoldenLayoutWrapper extends React.Component {
 
         //Manipulate dynamically the layout by modifying the redux store - glconfig - using actions
         var layout = new GoldenLayout(this.props.glConfig, this.layout);
-        
+        console.log(layout)
+        window.layout = layout;
         //We can register a component once and then use it multiple times with the same name in the configuration
         layout.registerComponent('FileView',
             wrapComponent(AgGridFileView, this.context.store)
@@ -42,6 +45,16 @@ class GoldenLayoutWrapper extends React.Component {
         window.addEventListener('resize', () => {
             layout.updateSize();
         });
+
+        window.addEventListener('dblclick', () => {
+            console.log('dbclick')
+            var newItemConfig = {
+                type: 'react-component',
+                component: 'FileView'
+            };
+            layout.root.contentItems[0].addChild(newItemConfig);
+            //layout.updateSize();
+        });
     }
 
     render() {
@@ -58,7 +71,7 @@ GoldenLayoutWrapper.contextTypes = {
     store: React.PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({ glConfig: state.glConfig });
+const mapStateToProps = (state) => ({ glConfig: state.glConfig, addReport: state.addReport });
 const mapDispatchToProps = (dispatch) => ({ actions: bindActionCreators(actions, dispatch) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoldenLayoutWrapper);
