@@ -1,0 +1,19 @@
+/* Make golden layout sections scrolable */
+body .lm_content{
+  overflow: scroll;
+}
+.root {
+    height: 100vh;
+}
+
+body {
+    height: 100vh;
+}
+
+.lm_root {
+    height: 100vh;
+}
+
+.goldenLayout {
+    height: 100vh;
+}
