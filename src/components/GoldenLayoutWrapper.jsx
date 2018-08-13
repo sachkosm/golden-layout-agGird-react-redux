@@ -10,6 +10,9 @@ class GoldenLayoutWrapper extends React.Component {
     constructor(props, context) {
         super(props)
         this.addAddNewReportEvent = this.addAddNewReportEvent.bind(this)
+        this.addNewReport = this.addNewReport.bind(this)
+
+        console.log('this.props.addNewReport ' + props.addNewReport)
     }
     //Not in use
     addAddNewReportEventWithTest() {
@@ -47,10 +50,14 @@ class GoldenLayoutWrapper extends React.Component {
             });
     };
 
-
-    shouldComponentUpdate(nextProps, nextState) {
-
+    addNewReport(params){
+        
     }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return true
+    // }
+    
     componentDidMount() {
         function wrapComponent(Component, store) {
             class Wrapped extends React.Component {
@@ -67,7 +74,6 @@ class GoldenLayoutWrapper extends React.Component {
 
         //Manipulate dynamically the layout by modifying the redux store - glconfig - using actions
         var layout = new GoldenLayout(this.props.glConfig, this.layout);
-        console.log(layout)
         window.layout = layout;
         //We can register a component once and then use it multiple times with the same name in the configuration
         layout.registerComponent('FileView',

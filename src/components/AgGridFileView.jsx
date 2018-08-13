@@ -57,7 +57,6 @@ class FileBrowser extends Component {
     }
 
     render() {
-        console.log(this.props.files);
         return (
             <div style={{ height: 500 }} className="ag-theme-balham" >
                 <DatePickerInput
@@ -69,7 +68,7 @@ class FileBrowser extends Component {
                 <AgGridReact  {...this.props.agGridConfig} /> : null}
 
  
-            </div >
+            </div>
         )
     }
 
