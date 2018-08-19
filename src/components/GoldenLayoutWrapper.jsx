@@ -1,6 +1,7 @@
 import GoldenLayout from 'golden-layout';
 import { Provider } from 'react-redux';
 import AgGridFileView from './AgGridFileView.jsx'
+import HeaderComponent from './HeaderComponent.js'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { actions } from '../reducers/actionCreators';
@@ -9,97 +10,67 @@ import $ from 'jquery'
 class GoldenLayoutWrapper extends React.Component {
     constructor(props, context) {
         super(props)
-        this.addAddNewReportEvent = this.addAddNewReportEvent.bind(this)
-        this.addNewReport = this.addNewReport.bind(this)
-
-        console.log('this.props.addNewReport ' + props.addNewReport)
     }
-    //Not in use
-    addAddNewReportEventWithTest() {
-        //When this function is executed the callBack function will be executed every 10 milliseconds
-        var interval = setInterval(function () {
-            var el = $('#HeaderComponentIconPlus'), i;
-            if (el === null) {
-                return;
-            }
-            console.log('tetsing')
-            console.log(el)
-            clearInterval(interval);
-
-            el.on('click', function() {
-                console.log('click')
-                var newItemConfig = {
-                    type: 'react-component',
-                    component: 'FileView'
-                };
-                layout.root.contentItems[0].addChild(newItemConfig);
-                //this.layout.updateSize();
-            });
-
-        }.bind(this), 10);
-    };
-    addAddNewReportEvent() {
-         $('#HeaderComponentIconPlus').on('click', function () {
-                console.log('click-AddNewReport')
-                var newItemConfig = {
-                    type: 'react-component',
-                    component: 'FileView'
-                };
-                layout.root.contentItems[0].addChild(newItemConfig);
-                //this.layout.updateSize();
-            });
-    };
-
-    addNewReport(params){
-        
-    }
-
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return true
-    // }
-    
     componentDidMount() {
-        function wrapComponent(Component, store) {
-            class Wrapped extends React.Component {
-                render() {
-                    return (
-                        <Provider store={store}>
-                            <Component {...this.props} />
-                        </Provider>
-                    );
+        function createGL(props, store, rootEl, config) {
+            //$('#HeaderComponentIconPlus').on('click', function () {
+
+            function wrapComponent(Component, store, props) {
+                class Wrapped extends React.Component {
+                    render() {
+                        return (
+                            <Provider store={store}>
+                                <Component {...props} />
+                            </Provider>
+                        );
+                    }
                 }
+                return Wrapped;
+            };
+
+
+            if (window.layout) {
+                // window.layout.destroy();
+                //Adding children
+                //setInterval is needed - because trying to add children may fail.
+                //We need to wait for the layout.root to be actually created and added to the layout.
+                let intervalID =setInterval(() => {
+                    let rootContainer = (!window.layout.root) ? window.layout.contentItems[0] : window.layout.root;
+                    if (rootContainer){
+                        clearInterval(intervalID)
+                        var newItemConfig = {
+                            type: 'react-component',
+                            component: props.name
+                        };
+                        window.layout.registerComponent(props.name, wrapComponent(props.component, store, props));
+                        window.layout.root.contentItems[0].addChild(newItemConfig);
+                        //this.layout.updateSize();                     
+                    }else{
+                        return
+                    }
+                }, 10);
+            } else {
+                //Initial GL Creation
+                var config = {
+                    content: [{
+                        type: 'stack',
+                        content: [{
+                            type: 'react-component',
+                            component: props.name
+                        }]
+                    }]
+                };
+
+                var layout = new GoldenLayout(config, rootEl);
+                window.layout = layout;
+                layout.registerComponent(props.name, wrapComponent(props.component, store, props));
+                layout.init();
+                window.addEventListener('resize', () => { layout.updateSize(); });
+                window.component = props.name;
             }
-            return Wrapped;
-        };
-
-        //Manipulate dynamically the layout by modifying the redux store - glconfig - using actions
-        var layout = new GoldenLayout(this.props.glConfig, this.layout);
-        window.layout = layout;
-        //We can register a component once and then use it multiple times with the same name in the configuration
-        layout.registerComponent('FileView',
-            wrapComponent(AgGridFileView, this.context.store)
-        );
-
-
-        // //Additional Registering is needed only if we are going to use a different component.
-        // layout.registerComponent('FileView1',
-        //     wrapComponent(AgGridFileView_2, this.context.store)
-        // );
-        // layout.registerComponent('FileView2',
-        //     wrapComponent(AgGridFileView_3, this.context.store)
-        // );
-
-        layout.init();
-
-        window.addEventListener('resize', () => {
-            layout.updateSize();
-        });
-
-        this.addAddNewReportEvent();
-
+        }
+        createGL(this.props, this.context.store, this.layout)
     }
-
-
     render() {
         return (
             <div className='goldenLayout' ref={input => this.layout = input} />

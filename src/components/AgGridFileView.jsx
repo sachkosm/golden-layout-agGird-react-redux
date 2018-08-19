@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { AgGridReact } from "ag-grid-react";
@@ -59,6 +60,7 @@ class FileBrowser extends Component {
     render() {
         return (
             <div style={{ height: 500 }} className="ag-theme-balham" >
+                {this.props.name}
                 <DatePickerInput
                     value={this.state.startDate}
                     onChange={this.selectedDateChange}
