@@ -19,7 +19,9 @@ class FileBrowser extends Component {
         this.selectedDateChange = this.selectedDateChange.bind(this)
         this.state = {
             startDate: new Date().toDateString(),
+            timeInstantiated: new Date().toISOString(),
             selectedNewDate: null
+
         }
     }
 
@@ -60,7 +62,7 @@ class FileBrowser extends Component {
     render() {
         return (
             <div style={{ height: 500 }} className="ag-theme-balham" >
-                {this.props.name}
+                {this.props.name} : {this.state.timeInstantiated}
                 <DatePickerInput
                     value={this.state.startDate}
                     onChange={this.selectedDateChange}

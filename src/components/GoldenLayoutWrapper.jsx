@@ -10,6 +10,7 @@ import $ from 'jquery'
 class GoldenLayoutWrapper extends React.Component {
     constructor(props, context) {
         super(props)
+
     }
 
     createGL(props, store, rootEl, config) {
@@ -40,7 +41,8 @@ class GoldenLayoutWrapper extends React.Component {
                         clearInterval(intervalID)
                         let newItemConfig = {
                             type: 'react-component',
-                            component: props.name
+                            component: props.name,
+                            title: props.name
                         };
                         window.GoldenLayoutWrapper.layout.registerComponent(props.name, wrapComponent(props.component, store, props));
                         window.GoldenLayoutWrapper.layout.root.contentItems[0].addChild(newItemConfig);
@@ -57,7 +59,8 @@ class GoldenLayoutWrapper extends React.Component {
                     type: 'stack',
                     content: [{
                         type: 'react-component',
-                        component: props.name
+                        component: props.name,
+                        title: props.name
                     }]
                 }]
             };
